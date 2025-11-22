@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "Twitter List Switcher",
+  "version": "1.0.0",
+  "description": "Switch between Twitter lists using keyboard shortcuts (` and Shift+`)",
+  "permissions": [],
+  "content_scripts": [
+    {
+      "matches": ["https://twitter.com/*", "https://x.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_end"
+    }
+  ]
+}
