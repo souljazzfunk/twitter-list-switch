@@ -7,7 +7,8 @@
   // Function to get all tab elements
   function getTabs() {
     // Find all elements with role="tab" that are part of the timeline navigation
-    return Array.from(document.querySelectorAll('a[role="tab"]'));
+    // Twitter uses div elements with role="tab" for their tab navigation
+    return Array.from(document.querySelectorAll('div[role="tab"]'));
   }
 
   // Function to get the currently selected tab index
