@@ -4,11 +4,22 @@
 (function() {
   'use strict';
 
+  // Hide the first tab ("For you" / "おすすめ")
+  const style = document.createElement('style');
+  style.textContent = `
+    div[data-testid="primaryColumn"] div[role="tablist"] > div:first-child {
+      display: none !important;
+    }
+  `;
+  document.documentElement.appendChild(style);
+
   // Function to get all tab elements
   function getTabs() {
     // Find all elements with role="tab" that are part of the timeline navigation
     // Twitter uses div elements with role="tab" for their tab navigation
-    return Array.from(document.querySelectorAll('div[role="tab"]'));
+    // Exclude tabs that are hidden via CSS (e.g. "For you")
+    return Array.from(document.querySelectorAll('div[role="tab"]'))
+      .filter(tab => tab.offsetParent !== null);
   }
 
   // Function to get the currently selected tab index
