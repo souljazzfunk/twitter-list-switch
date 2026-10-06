@@ -13,6 +13,20 @@
   `;
   document.documentElement.appendChild(style);
 
+  // X injects event tabs (e.g. "MLB") with no stable attribute, so match by label
+  const HIDDEN_TAB_LABELS = new Set(['MLB']);
+
+  function hideInjectedTabs() {
+    for (const tab of document.querySelectorAll('div[data-testid="primaryColumn"] div[role="tab"]')) {
+      if (HIDDEN_TAB_LABELS.has(tab.textContent.trim())) {
+        tab.parentElement.style.setProperty('display', 'none', 'important');
+      }
+    }
+  }
+
+  hideInjectedTabs();
+  new MutationObserver(hideInjectedTabs).observe(document.body, { childList: true, subtree: true });
+
   // Function to get all tab elements
   function getTabs() {
     // Find all elements with role="tab" that are part of the timeline navigation
