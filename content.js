@@ -13,8 +13,8 @@
   `;
   document.documentElement.appendChild(style);
 
-  // X injects event tabs (e.g. "MLB") with no stable attribute, so match by label
-  const HIDDEN_TAB_LABELS = new Set(['MLB']);
+  // X injects event tabs (e.g. "MLB", later renamed "Baseball") with no stable attribute, so match by label
+  const HIDDEN_TAB_LABELS = new Set(['MLB', 'Baseball']);
 
   function hideInjectedTabs() {
     for (const tab of document.querySelectorAll('div[data-testid="primaryColumn"] div[role="tab"]')) {
