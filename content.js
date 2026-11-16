@@ -4,35 +4,43 @@
 (function() {
   'use strict';
 
-  // Hide the first tab ("For you" / "おすすめ")
+  // Hide the first tab ("For you" / "おすすめ") on the home timeline only;
+  // on profile pages the first tab is "Posts"
   const style = document.createElement('style');
   style.textContent = `
-    div[data-testid="primaryColumn"] div[role="tablist"] > div:first-child {
+    html[data-tls-home] div[data-testid="primaryColumn"] div[role="tablist"] > div:first-child {
       display: none !important;
     }
   `;
   document.documentElement.appendChild(style);
 
-  // X injects event tabs (e.g. "MLB") with no stable attribute, so match by label
-  const HIDDEN_TAB_LABELS = new Set(['MLB']);
+  // X injects event tabs with no stable attribute and keeps renaming them
+  // ("MLB" -> "Baseball" -> ...), so match labels by case-insensitive substring
+  const HIDDEN_TAB_PATTERNS = [/mlb/i, /baseball/i];
 
   function hideInjectedTabs() {
     for (const tab of document.querySelectorAll('div[data-testid="primaryColumn"] div[role="tab"]')) {
-      if (HIDDEN_TAB_LABELS.has(tab.textContent.trim())) {
+      const label = tab.textContent.trim();
+      if (HIDDEN_TAB_PATTERNS.some(re => re.test(label))) {
         tab.parentElement.style.setProperty('display', 'none', 'important');
       }
     }
   }
 
-  hideInjectedTabs();
-  new MutationObserver(hideInjectedTabs).observe(document.body, { childList: true, subtree: true });
+  // X is a single-page app, so re-check the path whenever the DOM changes
+  function onDomChange() {
+    document.documentElement.toggleAttribute('data-tls-home', location.pathname === '/home');
+    hideInjectedTabs();
+  }
+
+  onDomChange();
+  new MutationObserver(onDomChange).observe(document.body, { childList: true, subtree: true });
 
   // Function to get all tab elements
   function getTabs() {
-    // Find all elements with role="tab" that are part of the timeline navigation
-    // Twitter uses div elements with role="tab" for their tab navigation
+    // Home timeline tabs are <div role="tab">; profile tabs (Posts, Replies, ...) are <a role="tab">
     // Exclude tabs that are hidden via CSS (e.g. "For you")
-    return Array.from(document.querySelectorAll('div[role="tab"]'))
+    return Array.from(document.querySelectorAll('div[data-testid="primaryColumn"] [role="tab"]'))
       .filter(tab => tab.offsetParent !== null);
   }
 
