@@ -19,7 +19,7 @@ A Chrome extension that allows you to switch between Twitter (X) lists using key
 
 ## Usage
 
-1. Navigate to Twitter/X home timeline (https://twitter.com/home or https://x.com/home)
+1. Navigate to the Twitter/X home timeline (https://x.com/home) or a profile page (e.g. https://x.com/thunder_bark, cycling Posts → Replies → Reposts → Media)
 2. Use the keyboard shortcuts:
    - `` ` `` - Move to next tab (Following → 1st → 2nd → feed → ...)
    - `Shift + `` ` `` - Move to previous tab (... → feed → 2nd → 1st → Following)
